@@ -2,4 +2,6 @@
 vendor
 .DS_Store
 template-output.yml
-handlers/websocket
+handlers/*/on_connect
+handlers/*/on_disconnect
+handlers/*/send_message
