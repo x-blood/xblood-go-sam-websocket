@@ -10,7 +10,7 @@ import (
 const tableName = "xblood-go-sam-websocket-table"
 
 type Connection struct {
-	ConnectionID string `dynamo"connectionID,hash"`
+	ConnectionID string `dynamo"connectionId,hash"`
 }
 
 func Put(connectionID string) error {
@@ -48,7 +48,7 @@ func Delete(connectionID string) error {
 		return errors.WithStack(err)
 	}
 	table := getTable(db, tableName)
-	table.Delete("connectionID", connectionID).Run()
+	table.Delete("connectionId", connectionID).Run()
 
 	return nil
 }
