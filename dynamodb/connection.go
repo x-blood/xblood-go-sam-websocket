@@ -1,9 +1,10 @@
 package dynamodb
 
 import (
+	"fmt"
+	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/session"
 	"github.com/guregu/dynamo"
-	"github.com/aws/aws-sdk-go/aws"
 	"github.com/pkg/errors"
 )
 
@@ -14,14 +15,19 @@ type Connection struct {
 }
 
 func Put(connectionID string) error {
+	fmt.Println("Start put process")
 	db, err := connect()
+	fmt.Println(db)
 	if err != nil {
 		return errors.WithStack(err)
 	}
 	table := getTable(db, tableName)
+	fmt.Println(table)
 	putModel := Connection{ConnectionID: connectionID}
+	fmt.Println(putModel)
 	table.Put(putModel).Run()
 
+	fmt.Println("Finished put process")
 	return nil
 }
 
@@ -53,7 +59,6 @@ func Delete(connectionID string) error {
 	return nil
 }
 
-
 func getTable(db *dynamo.DB, tableName string) dynamo.Table {
 	return db.Table(tableName)
 }
@@ -66,5 +71,3 @@ func connect() (*dynamo.DB, error) {
 
 	return dynamo.New(dynamoSession), nil
 }
-
-
