@@ -8,20 +8,21 @@ import (
 	"xblood-go-sam-websocket/dynamodb"
 	"github.com/aws/aws-sdk-go/aws/session"
 	"github.com/aws/aws-sdk-go/aws"
+	"xblood-go-sam-websocket/response"
 )
 
 func HandleRequest(request events.APIGatewayWebsocketProxyRequest) events.APIGatewayProxyResponse {
-	fmt.Sprintf("start send_message")
+	fmt.Println("start send_message")
 
 	connections, err := dynamodb.GetAll()
 	if err != nil {
-		create500response()
+		response.Create500response()
 	}
 
 	var config *aws.Config
 	newSession, err := session.NewSession(config)
 	if err != nil {
-		create500response()
+		response.Create500response()
 	}
 
 	svc := apigatewaymanagementapi.New(newSession)
@@ -34,22 +35,8 @@ func HandleRequest(request events.APIGatewayWebsocketProxyRequest) events.APIGat
 		})
 	}
 
-	fmt.Sprintf("end send_message")
-	return create200response()
-}
-
-func create200response() events.APIGatewayProxyResponse {
-	return events.APIGatewayProxyResponse{
-		Body:       string("ok"),
-		StatusCode: 200,
-	}
-}
-
-func create500response() events.APIGatewayProxyResponse {
-	return events.APIGatewayProxyResponse{
-		Body:       string("ng"),
-		StatusCode: 500,
-	}
+	fmt.Println("end send_message")
+	return response.Create200response()
 }
 
 func main() {

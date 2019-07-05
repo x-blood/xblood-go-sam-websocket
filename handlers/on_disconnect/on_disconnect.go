@@ -5,13 +5,19 @@ import (
 	"github.com/aws/aws-lambda-go/lambda"
 	"github.com/aws/aws-lambda-go/events"
 	"xblood-go-sam-websocket/dynamodb"
+	"xblood-go-sam-websocket/response"
 )
 
-func HandleRequest(request events.APIGatewayWebsocketProxyRequest) {
-	fmt.Sprintf("start on_disconnect")
+func HandleRequest(request events.APIGatewayWebsocketProxyRequest) events.APIGatewayProxyResponse {
+	fmt.Println("start on_disconnect")
 	connectionID := request.RequestContext.ConnectionID
-	dynamodb.Delete(connectionID)
-	fmt.Sprintf("end on_disconnect")
+	err := dynamodb.Delete(connectionID)
+	if err != nil {
+		fmt.Println(err)
+		return response.Create500response()
+	}
+	fmt.Println("end on_disconnect")
+	return response.Create200response()
 }
 
 func main() {
