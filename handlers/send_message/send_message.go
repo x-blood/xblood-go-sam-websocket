@@ -2,16 +2,16 @@ package main
 
 import (
 	"fmt"
-	"github.com/aws/aws-lambda-go/lambda"
 	"github.com/aws/aws-lambda-go/events"
+	"github.com/aws/aws-lambda-go/lambda"
+	"github.com/aws/aws-sdk-go/aws"
+	"github.com/aws/aws-sdk-go/aws/session"
 	"github.com/aws/aws-sdk-go/service/apigatewaymanagementapi"
 	"xblood-go-sam-websocket/dynamodb"
-	"github.com/aws/aws-sdk-go/aws/session"
-	"github.com/aws/aws-sdk-go/aws"
 	"xblood-go-sam-websocket/response"
 )
 
-func HandleRequest(request events.APIGatewayWebsocketProxyRequest) events.APIGatewayProxyResponse {
+func HandleRequest(request events.APIGatewayWebsocketProxyRequest) (events.APIGatewayProxyResponse, error) {
 	fmt.Println("start send_message")
 
 	connections, err := dynamodb.GetAll()
@@ -31,7 +31,7 @@ func HandleRequest(request events.APIGatewayWebsocketProxyRequest) events.APIGat
 	for _, connection := range connections {
 		svc.PostToConnection(&apigatewaymanagementapi.PostToConnectionInput{
 			ConnectionId: &connection.ConnectionID,
-			Data: []byte(testMessage),
+			Data:         []byte(testMessage),
 		})
 	}
 

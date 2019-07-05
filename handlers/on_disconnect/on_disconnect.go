@@ -2,13 +2,13 @@ package main
 
 import (
 	"fmt"
-	"github.com/aws/aws-lambda-go/lambda"
 	"github.com/aws/aws-lambda-go/events"
+	"github.com/aws/aws-lambda-go/lambda"
 	"xblood-go-sam-websocket/dynamodb"
 	"xblood-go-sam-websocket/response"
 )
 
-func HandleRequest(request events.APIGatewayWebsocketProxyRequest) events.APIGatewayProxyResponse {
+func HandleRequest(request events.APIGatewayWebsocketProxyRequest) (events.APIGatewayProxyResponse, error) {
 	fmt.Println("start on_disconnect")
 	connectionID := request.RequestContext.ConnectionID
 	err := dynamodb.Delete(connectionID)
