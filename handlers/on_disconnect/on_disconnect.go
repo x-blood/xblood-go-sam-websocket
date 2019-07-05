@@ -11,8 +11,7 @@ import (
 func HandleRequest(request events.APIGatewayWebsocketProxyRequest) (events.APIGatewayProxyResponse, error) {
 	fmt.Println("start on_disconnect")
 	connectionID := request.RequestContext.ConnectionID
-	fmt.Printf("connectionId : %s", connectionID)
-	fmt.Println("start DynamoDB delete")
+	fmt.Printf("connectionId : %s ¥n", connectionID)
 	err := dynamodb.Delete(connectionID)
 	if err != nil {
 		fmt.Println(err)

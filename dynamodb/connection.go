@@ -1,7 +1,6 @@
 package dynamodb
 
 import (
-	"fmt"
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/session"
 	"github.com/guregu/dynamo"
@@ -11,23 +10,18 @@ import (
 const tableName = "xblood-go-sam-websocket-table"
 
 type Connection struct {
-	ConnectionID string `dynamo"connectionId,hash"`
+	ConnectionID string `dynamo:"connectionId,hash"`
 }
 
 func Put(connectionID string) error {
-	fmt.Println("Start put process")
 	db, err := connect()
-	fmt.Println(db)
 	if err != nil {
 		return errors.WithStack(err)
 	}
 	table := getTable(db, tableName)
-	fmt.Println(table)
 	putModel := Connection{ConnectionID: connectionID}
-	fmt.Println(putModel)
 	table.Put(putModel).Run()
 
-	fmt.Println("Finished put process")
 	return nil
 }
 
